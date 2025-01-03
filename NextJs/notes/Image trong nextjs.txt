@@ -1,0 +1,102 @@
+ 
+ - <Image/> component trong next js kế thừa thẻ img trong html để cung cấp một số tính năng:
+
+ + tối ưu size: tự động cung cấp đúng size cho từng thiết bị, sử dụng định dạng ảnh hiện đại như WebP và AVIF.
+
+ + ổn đinh: ngăn layout shift tự động khi ảnh đang load
+ + tải trang nhanh: Chỉ tải hình ảnh khi chúng vào khung nhìn bằng cách sử dụng tính năng lazy loading của trình duyệt gốc, 
+ với các trình giữ chỗ làm mờ tùy chọn.
+
+ - import <Image> từ next/image: 
+    import Image from 'next/image'
+
+    export default function Page() {
+    return <Image src="" alt="" />
+    }
+
+- Thuộc tính src có thể là local or remote image.
+
+#Local Images: các files ảnh từ public folder
+        import Image from 'next/image'
+        import profilePic from './me.png'
+        
+        export default function Page() {
+        return (
+            <Image
+            src={profilePic}
+            alt="Picture of the author"
+            // width={500} automatically provided
+            // height={500} automatically provided
+            // blurDataURL="data:..." automatically provided
+            // placeholder="blur" // Optional blur-up while loading
+            />
+        )
+        }
+
+- Nextjs sẽ tự động xác định width và height của ảnh dựa vào ảnh đc import. những giá trị này xác định tỉ lệ ảnh ngăn layout shift khi load ảnh
+
+#Remote Images: các ảnh cung cấp từ URL
+- cần xác định width và height vì nextjs không truy cập tới các remote file trong quá trình build
+
+#Lồng Layout con
+- Nếu muốn thêm một layout con trong mỗi folder, thêm file layout.tsx(tên mặc định, bắt buộc) vào trong folder đó
+
+#Chuyển trang với các routes
+- sử dụng <Link> component để điều hướng các route. 
+- import <Link> từ next/link và truyền href 
+
+ví dụ:
+        import Link from 'next/link'
+        
+        export default function Page() {
+            return <Link href="/dashboard">Dashboard</Link>
+        }
+
+- Sử dụng useRouter hook - Client component:
+
+ví dụ: 
+        'use client' //mặc định khi tạo 1 component trong next.js thì next hiểu đó là server component nên cần dùng 'use client' để chuyển thành client component
+        
+        import { useRouter } from 'next/navigation'
+        
+        export default function Page() {
+        const router = useRouter()
+        
+        return (
+            <button type="button" onClick={() => router.push('/dashboard')}>
+            Dashboard
+            </button>
+        )
+        }
+
+*Recommend sử dụng Link component để điều hướng giữa các rout trừ khi có yêu cầu cụ thể sử dụng useRouter
+
+#Sử dụng Redirect - server component
+- sử dụng khi xử lí chuyển hướng trên server, ví dụ kiểm trả quyền truy cập hoặc trạng thái login
+- ví dụ:
+
+        import { redirect } from 'next/navigation'
+
+        async function fetchTeam(id: string) {
+        const res = await fetch('https://...')
+        if (!res.ok) return undefined
+        return res.json()
+        }
+        
+        export default async function Profile({
+        params,
+        }: {
+        params: Promise<{ id: string }>
+        }) {
+        const id = (await params).id
+        if (!id) {
+            redirect('/login')
+        }
+        
+        const team = await fetchTeam(id)
+        if (!team) {
+            redirect('/join')
+        }
+        
+        // ...
+        }

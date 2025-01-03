@@ -1,0 +1,11 @@
+#Global style
+- khi cần thêm CSS cho cả app: ví dụ các thẻ cơ bản 'body,html, a, p, h1,...h6' hay '*'
+hoặc đôi khi cần thêm một số class để dùng toàn app thì cũng có thể thêm ở đây.
+- CSS ở file 'src/app/global.css'
+- Nếu dùng tailwind thì nên dùng '@layer' để đảm bảo tính dễ đọc cũng như là độ ưu tiên css khi build
+
+#Tạo 1 class css mà tailwind không hỗ trợ hoặc override 1 class thư viện nào đó
+- Dùng CSS Module để đảm bảo không bị xung đột với class css khác.
+
+#Khi cần toggle class hoặc css động
+- dùng 'clsx'

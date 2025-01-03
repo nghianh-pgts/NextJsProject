@@ -1,0 +1,14 @@
+
+#NextJs là gì?
+- Next.js là một framework React mạnh mẽ, được xây dựng trên Node.js và phát triển bởi Vercel. Nó được thiết kế để giúp phát triển ứng dụng web nhanh chóng, hiệu quả và linh hoạt. Next.js hỗ trợ nhiều tính năng nổi bật, đặc biệt phù hợp cho các ứng dụng web hiện đại.
+
+#Next JS giải quyết vấn đề gì?
+    - Render website ở server nên thân thiện với SEO
+    - tích hợp nhiều tool mà React.js thuần không có
+        + tối ưu image, font, script
+        + CSS module
+        + Routing
+        + Middlewware
+        + server action
+        + SEO...
+    - Thống nhất cách viết code: ở React.js có quá nhiều cách viết code và không có quy chuẩn.

@@ -1,0 +1,28 @@
+- Routing trong Next.js được quản lý dựa trên cấu trúc thư mục của thư mục pages/. Dưới đây là các khái niệm cơ bản và cách sử dụng routing trong Next.js:
+
+#routing cơ bản:
+- ví dụ: Mỗi tệp trong thư mục pages/ tự động trở thành một route.
+- Cấu trúc thư mục:
+        pages/
+        ├── index.js      // Tương ứng với route "/"
+        ├── about.js      // Tương ứng với route "/about"
+        ├── contact.js    // Tương ứng với route "/contact"
+
+    + pages/index.js: Tương ứng với / (trang chính).
+    + pages/about.js: Tương ứng với /about.
+    + pages/contact.js: Tương ứng với /contact.
+
+
+#Nested Routing
+- Thư mục con trong pages/ được ánh xạ thành route.
+- Cấu trúc thư mục:
+        pages/
+        ├── blog/
+        │   ├── index.js  // Tương ứng với "/blog/"
+        │   ├── post.js   // Tương ứng với "/blog/post"
+
+    + pages/blog/index.js: Tương ứng với /blog.
+    + pages/blog/post.js: Tương ứng với /blog/post.
+
+
+#Nếu muốn tạo folder không ảnh hưởng đến Routing thì bao tên folder trong dấu '()'

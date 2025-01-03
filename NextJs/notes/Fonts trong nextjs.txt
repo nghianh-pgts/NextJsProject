@@ -1,0 +1,95 @@
+
+#Sử dụng google font
+- Bạn có thể tự động lưu trữ bất kỳ Phông chữ Google nào. Phông chữ được bao gồm trong quá trình triển khai và được phân phát từ cùng một miền với quá trình triển khai của bạn, nghĩa là không có yêu cầu nào được trình duyệt gửi tới Google khi người dùng truy cập trang web của bạn.
+
+import font từ google next/font/google:
+
+exp:
+    import { Geist } from 'next/font/google'
+    const geist = Geist({
+    subsets: ['latin'],
+    })
+    
+    export default function RootLayout({
+    children,
+    }: {
+    children: React.ReactNode
+    }) {
+    return (
+        <html lang="en" className={geist.className}>
+        <body>{children}</body>
+        </html>
+    )
+    }
+
+- Next.js recommend sử dụng variable fonts cho trải nghiệm tốt và tính linh hoạt
+- nếu không thể sử dụng variable font, cần chỉ định thuộc tính weight
+
+exp:
+    import { Roboto } from 'next/font/google'
+ 
+    const roboto = Roboto({
+    weight: '400',
+    subsets: ['latin'],
+    })
+    
+    export default function RootLayout({
+    children,
+    }: {
+    children: React.ReactNode
+    }) {
+    return (
+        <html lang="en" className={roboto.className}>
+        <body>{children}</body>
+        </html>
+    )
+    }
+
+ #Dùng local fonts (trường hợp font nào đó không có trong goole font)
+    - Để sử dụng local fonts, import font của bạn từ next/font/local và chỉ định src của tệp local font trong thư mục public.
+
+    -exp:
+        import localFont from 'next/font/local'
+ 
+        const myFont = localFont({
+        src: './my-font.woff2',
+        })
+        
+        export default function RootLayout({
+        children,
+        }: {
+        children: React.ReactNode
+        }) {
+        return (
+            <html lang="en" className={myFont.className}>
+            <body>{children}</body>
+            </html>
+        )
+        }
+
+- Nếu muốn dùng nhiều file cho 1 font family, thì src có thể là một mảng:
+- exp:
+        const roboto = localFont({
+        src: [
+            {
+            path: './Roboto-Regular.woff2',
+            weight: '400',
+            style: 'normal',
+            },
+            {
+            path: './Roboto-Italic.woff2',
+            weight: '400',
+            style: 'italic',
+            },
+            {
+            path: './Roboto-Bold.woff2',
+            weight: '700',
+            style: 'normal',
+            },
+            {
+            path: './Roboto-BoldItalic.woff2',
+            weight: '700',
+            style: 'italic',
+            },
+        ],
+        })

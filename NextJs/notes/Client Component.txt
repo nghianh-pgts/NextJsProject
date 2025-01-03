@@ -1,0 +1,17 @@
+#Client Components
+- nơi một Component được render hoàn toàn trên phía client (trình duyệt) thay vì trên phía server.
+- Next.js hỗ trợ cả Client Components và Server Components, giúp tối ưu hóa hiệu suất và khả năng mở rộng.
+
+#Đặc điểm:
+-  Chạy hoàn toàn trên trình duyệt
+-  Khai báo thông qua 'use client' tại đầu file
+- Client Component bị render tối thiếu 2 lần: 1 lần build, 1+ lần ở client
+- Vì trả về HTML sẵn nên người dùng có thể thấy content ngay lập tức(tăng UX)
+- Dù thấy content ngay lập tức nhưng vẫn không thể tương tác ngay được vì cần phải chờ trình duyệt đồng bộ lại client Component (render, gắn sự kiện, state, effect,...)
+
+#Ưu điểm:
+- Giảm gánh nặng cho server khi Component nặng và phức tạp về logic => server yếu thì nên dùng
+
+#Nhược điểm:
+- SEO không tốt
+- thiết bị client yếu thì chạy không nổi
