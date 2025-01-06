@@ -1,0 +1,7 @@
+- parse(): Thực hiện validate, nếu không hợp lệ sẽ ném lỗi.
+- safeParse(): Trả về kết quả trong object { success: boolean, data/errors }.
+
+const schema = z.string().min(5);
+
+schema.parse("Hello"); // OK
+schema.safeParse("Hi"); // { success: false, error: ... }

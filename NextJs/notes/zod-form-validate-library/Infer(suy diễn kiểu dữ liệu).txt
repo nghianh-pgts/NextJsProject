@@ -1,0 +1,4 @@
+Suy diễn kiểu dữ liệu từ schema Zod:
+
+const userSchema = z.object({ username: z.string() });
+type User = z.infer<typeof userSchema>; // { username: string }

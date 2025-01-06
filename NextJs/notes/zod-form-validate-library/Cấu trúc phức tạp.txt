@@ -1,0 +1,21 @@
+#object
+    const personSchema = z.object({
+        name: z.string(),
+        age: z.number(),
+    });
+
+#Nested object
+        const postSchema = z.object({
+        title: z.string(),
+        author: z.object({
+            name: z.string(),
+            email: z.string().email(),
+        }),
+    });  
+
+#Union (Nhiều kiểu dữ liệu)
+    z.union([z.string(), z.number()]); // Dữ liệu có thể là string hoặc number
+
+#Optional và Nullable
+    z.string().optional(); // Không bắt buộc
+    z.string().nullable(); // Có thể null

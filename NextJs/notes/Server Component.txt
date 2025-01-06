@@ -1,0 +1,13 @@
+#Server Component
+- Đây là chế độ mặc định trong Next js
+
+#Ưu điểm:
+- Fetch data ở server => nơi gần data center nên là sẽ nhanh hơn fetch ở clent => Giảm thiểu thời gian rendering, tăng UX
+- Bảo mật: Server cho phép giữ các data nhạy cảm, logic đặc biệt không muốn public ở client.
+- Caching: Vì được render ở server nên có thể lưu giữ cache cho nhiều người dùng khác nhau => không cần render trên mỗi request.
+- Bundle size: Giảm thiểu JS bundle size vì client không cần tải về phần js logic để render HTML
+- load trang lần đầu nhanh và chỉ số FCP(Firrst contentful Paint) thấp do người dùng thấy content ngay lập tức.
+- SEO và Social Network Shareability
+- Streaming 
+
+=> Ưu tiên dùng Server Component khi có thể

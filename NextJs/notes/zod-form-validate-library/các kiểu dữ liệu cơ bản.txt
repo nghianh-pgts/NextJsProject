@@ -1,0 +1,18 @@
+
+#Chuỗi
+    z.string().min(5).max(100).email(); // Chuỗi email từ 5-100 ký tự
+
+#Số
+    z.number().min(0).max(100).int(); // Số nguyên từ 0 đến 100
+
+#Boolean
+    z.boolean(); // true hoặc false
+
+#Ngày tháng
+    z.date(); // Kiểm tra kiểu Date
+
+#Mảng
+    z.array(z.string()); // Mảng các chuỗi
+
+#Tuple
+    z.tuple([z.string(), z.number()]); // Tuple chứa [string, number]
