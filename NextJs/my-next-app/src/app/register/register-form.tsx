@@ -17,48 +17,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import envConfig from "../../../config";
-
-//Sử dụng z.object từ zod để định nghĩa schema cho dữ liệu của form.
-const formSchema = z
-  .object({
-    /**
-     * Trường username:
-        z.string(): Xác định đây là một chuỗi.
-        min(2): Đảm bảo chuỗi có độ dài tối thiểu là 2 ký tự.
-        max(50): Đảm bảo chuỗi có độ dài tối đa là 50 ký tự.
-     */
-    name: z
-      .string()
-      .min(5, { message: "tên phải tối thiểu 5 kí tự" })
-      .max(50, { message: "tên tối đa là 50 kí tự" }),
-    email: z.string().email({ message: "email không hợp lệ" }),
-    password: z
-      .string()
-      .min(6, { message: "mật khẩu tối thiểu 6 kí tự" })
-      .max(100, { message: "mật khẩu tối đa 100 kí tự" }),
-    confirmPassword: z
-      .string()
-      .min(6, { message: "mật khẩu tối thiểu 6 kí tự" })
-      .max(100, { message: "mật khẩu tối đa 100 kí tự" }),
-  })
-  .strict() //strict() để đảm bảo rằng dữ liệu không chứa các trường không được định nghĩa trong schema.
-  .superRefine(({ password, confirmPassword }, ctx) => {
-    if (password !== confirmPassword) {
-      return ctx.addIssue({
-        code: "custom",
-        message: "mật khẩu không khớp",
-        path: ["confirmPassword"],
-      });
-    }
-  });
-
-type FormValues = z.infer<typeof formSchema>;
+import { RegisterSchema, RegisterType } from "@/schemaValidations/authSchema";
 
 const RegisterForm = () => {
   console.log(process.env.NEXT_PUBLIC_API_ENDPOINT);
   // 1. Define your form.
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<RegisterType>({
+    resolver: zodResolver(RegisterSchema),
     defaultValues: {
       email: "",
       name: "",
@@ -68,7 +33,7 @@ const RegisterForm = () => {
   });
 
   // 2. Define a submit handler.
-  async function onSubmit(values: FormValues) {
+  async function onSubmit(values: RegisterType) {
     const result = await fetch(
       `${envConfig.NEXT_PUBLIC_API_ENDPOINT}/auth/register`,
       {

@@ -19,19 +19,9 @@ import { Input } from "@/components/ui/input";
 import envConfig from "../../../config";
 import { useToast } from "@/hooks/use-toast";
 import { useAppContext } from "@/app/AppProvider";
-
-//Sử dụng z.object từ zod để định nghĩa schema cho dữ liệu của form.
-const loginSchema = z
-  .object({
-    email: z.string().email({ message: "email không hợp lệ" }),
-    password: z
-      .string()
-      .min(6, { message: "mật khẩu tối thiểu 6 kí tự" })
-      .max(100, { message: "mật khẩu tối đa 100 kí tự" }),
-  })
-  .strict(); //strict() để đảm bảo rằng dữ liệu không chứa các trường không được định nghĩa trong schema.;
-
-type FormValues = z.infer<typeof loginSchema>;
+import http from "@/lib/http";
+import { LoginBodyType, loginSchema } from "@/schemaValidations/authSchema";
+import authApiRequest from "@/apiRequests/auth";
 
 const LoginForm = () => {
   //console.log(process.env.NEXT_PUBLIC_API_ENDPOINT);
@@ -39,7 +29,7 @@ const LoginForm = () => {
   console.log("re-render");
   const { setSessionToken } = useAppContext();
 
-  const form = useForm<FormValues>({
+  const form = useForm<LoginBodyType>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
@@ -50,55 +40,36 @@ const LoginForm = () => {
   const { toast } = useToast();
 
   // 2. Define a submit handler.
-  async function onSubmit(values: FormValues) {
+  async function onSubmit(values: LoginBodyType) {
     try {
-      const result = await fetch(
-        `${envConfig.NEXT_PUBLIC_API_ENDPOINT}/auth/login`,
-        {
-          body: JSON.stringify(values),
-          headers: {
-            "Content-Type": "application/json",
-          },
-          method: "POST",
-        }
-      ).then(async (res) => {
-        const payload = await res.json();
-        const data = {
-          status: res.status,
-          payload,
-        };
-
-        if (!res.ok) {
-          throw data;
-        }
-        return data;
-      });
+      const result = await authApiRequest.login(values);
       toast({
         title: "success",
         description: "Đăng nhập thành công",
       });
 
-      const resultFromNextServer = await fetch("/api/auth", {
-        method: "POST",
-        body: JSON.stringify(result),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }).then(async (res) => {
-        const payload = await res.json();
-        const data = {
-          status: res.status,
-          payload,
-        };
+      // const resultFromNextServer = await fetch("/api/auth", {
+      //   method: "POST",
+      //   body: JSON.stringify(result),
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      // }).then(async (res) => {
+      //   const payload = await res.json();
+      //   const data = {
+      //     status: res.status,
+      //     payload,
+      //   };
 
-        if (!res.ok) {
-          throw data;
-        }
-        return data;
-      });
+      //   if (!res.ok) {
+      //     throw data;
+      //   }
+      //   return data;
+      // });
+      await authApiRequest.auth({ sessionToken: result.payload.data.token });
 
-      console.log(resultFromNextServer);
-      setSessionToken(resultFromNextServer.payload.data.token);
+      // console.log(resultFromNextServer);
+      setSessionToken(result.payload.data.token);
     } catch (error: any) {
       const errors = error.payload.errors as {
         message: string;

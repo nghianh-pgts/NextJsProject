@@ -1,0 +1,7 @@
+#Quản lí Auth trong Next.js
+- Để xác thực 1 request thì backend thường xác thực qua 2 cách:
+1. FE gửi token qua header của request như `Authorization: Bearer <token>`(token thường được lưu trong localtorage của trình duyệt)
+2. FE gửi token qua cookie của request (sự thật là cookie cũng nằm trong header của request)
+
+- Cách dùng Cookie có ưu điểm là an toàn hơn 1 chút so với cách dùng localStorage, nhưng đòi hỏi setup giữa Backend và FrontEnd phức tạp hơn.
+

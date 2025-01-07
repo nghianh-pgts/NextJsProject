@@ -1,0 +1,52 @@
+#Middleware là gì
+- Middleware trong Next.js là một tính năng cho phép chạy mã trước khi hoàn thành việc xử lý yêu cầu (request) hoặc trước khi gửi phản hồi (response). Middleware được thực thi trên Edge Runtime, cho phép xử lý yêu cầu nhanh và linh hoạt.
+
+#Cách sử dụng
+- Middleware trong Next.js được khai báo trong một tệp middleware.ts hoặc middleware.js ở gốc thư mục dự án.
+
+#Khi nào sử dụng?
+- Xác thực (Authentication/Authorization): Kiểm tra người dùng đã đăng nhập hay chưa.
+- Chuyển hướng (Redirect): Tùy chỉnh luồng điều hướng dựa trên trạng thái người dùng.
+- Kiểm tra và chỉnh sửa request: Ví dụ, thêm headers, kiểm tra IP, ghi log.
+- Chuyển hướng ngôn ngữ (Localization): Điều hướng người dùng đến phiên bản trang phù hợp với ngôn ngữ.
+
+#Cấu trúc cơ bản
+
+            import { NextResponse } from "next/server";
+            import type { NextRequest } from "next/server";
+
+            export function middleware(request: NextRequest) {
+            // Xử lý logic trong middleware
+
+            // Ví dụ: Chuyển hướng nếu người dùng không có token
+            const token = request.cookies.get("sessionToken")?.value;
+
+            if (!token) {
+                return NextResponse.redirect(new URL("/login", request.url));
+            }
+
+            return NextResponse.next(); // Tiếp tục xử lý yêu cầu
+            }
+
+#Các API chính
+
+- NextRequest: Là đối tượng đại diện cho yêu cầu HTTP, cung cấp các phương thức và thuộc tính sau:
+    + request.nextUrl: URL của yêu cầu.
+    + request.cookies: Truy cập cookies.
+    + request.headers: Truy cập headers.
+    + request.ip: Lấy IP của client.
+
+- NextResponse: dùng để trả phản hồi hoặc thay đổi luồng xử lý yêu cầu
+    + NextResponse.next(): Tiếp tục xử lý request trong ứng dụng.
+    + NextResponse.redirect(url): Chuyển hướng đến một URL khác.
+    + NextResponse.rewrite(url): Gửi request đến một route khác mà không thay đổi URL trên trình duyệt.
+    + NextResponse.json(data): Trả về phản hồi dạng JSON.
+
+
+#Tùy chỉnh Middleware cho Route cụ thể
+- có thể chỉ định các route mà Middleware sẽ áp dụng bằng cách cấu hình matcher trong next.config.js:
+
+#Hạn chế
+- Không thể truy cập vào DOM hoặc sử dụng các phương thức chỉ dành cho Node.js (như fs).
+- Middleware chạy trên Edge Runtime, không hỗ trợ tất cả các thư viện Node.js.
+- Không thể kết nối trực tiếp đến cơ sở dữ liệu.
