@@ -17,6 +17,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import envConfig from "../../../config";
+import { useToast } from "@/hooks/use-toast";
+import { useAppContext } from "@/app/AppProvider";
 
 //Sử dụng z.object từ zod để định nghĩa schema cho dữ liệu của form.
 const loginSchema = z
@@ -32,8 +34,11 @@ const loginSchema = z
 type FormValues = z.infer<typeof loginSchema>;
 
 const LoginForm = () => {
-  console.log(process.env.NEXT_PUBLIC_API_ENDPOINT);
+  //console.log(process.env.NEXT_PUBLIC_API_ENDPOINT);
   // 1. Define your form.
+  console.log("re-render");
+  const { setSessionToken } = useAppContext();
+
   const form = useForm<FormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -41,6 +46,8 @@ const LoginForm = () => {
       password: "",
     },
   });
+
+  const { toast } = useToast();
 
   // 2. Define a submit handler.
   async function onSubmit(values: FormValues) {
@@ -64,28 +71,54 @@ const LoginForm = () => {
         if (!res.ok) {
           throw data;
         }
+        return data;
+      });
+      toast({
+        title: "success",
+        description: "Đăng nhập thành công",
+      });
 
+      const resultFromNextServer = await fetch("/api/auth", {
+        method: "POST",
+        body: JSON.stringify(result),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then(async (res) => {
+        const payload = await res.json();
+        const data = {
+          status: res.status,
+          payload,
+        };
+
+        if (!res.ok) {
+          throw data;
+        }
         return data;
       });
 
-      console.log(result);
+      console.log(resultFromNextServer);
+      setSessionToken(resultFromNextServer.payload.data.token);
     } catch (error: any) {
-
-      const errors = (error as any).payload.errors as {
-        field: string;
+      const errors = error.payload.errors as {
         message: string;
-      }[]
-      const status = error.status as number;
+        field: string;
+      }[];
 
-      if (status === 400) {
-        for (const error of errors) {
-          form.setError(error.field as 'email'| 'password' , {
+      const status = error.status as number;
+      if (status === 422) {
+        errors.forEach((error) => {
+          form.setError(error.field as "email" | "password", {
             type: "server",
             message: error.message,
           });
-        }
+        });
       } else {
-        console.error(error);
+        toast({
+          title: "Error: lỗi đăng nhập",
+          description: "Đã có lỗi xảy ra",
+        });
+      }
     }
   }
 
@@ -105,7 +138,6 @@ const LoginForm = () => {
                 <FormControl>
                   <Input type="email" placeholder="email" {...field} />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             )}
