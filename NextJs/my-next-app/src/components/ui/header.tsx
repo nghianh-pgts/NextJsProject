@@ -1,3 +1,4 @@
+import ButtonLogout from "@/components/ui/button-logout";
 import { ModeToggle } from "@/components/ui/mode-toggle";
 import Link from "next/link";
 import React from "react";
@@ -12,6 +13,10 @@ const Header = () => {
 
         <li>
           <Link href="/register">Đăng ký</Link>
+        </li>
+
+        <li>
+          <ButtonLogout />
         </li>
       </ul>
       <ModeToggle />

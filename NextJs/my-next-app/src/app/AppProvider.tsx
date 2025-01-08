@@ -1,28 +1,21 @@
 "use client";
-import { createContext, useContext, useState } from "react";
+import { ClientSessionToken } from "@/lib/http";
+import { createContext, useLayoutEffect, useState } from "react";
 
-const AppContext = createContext({
-  sessionToken: "",
-  setSessionToken: (sessionToken: string) => {},
-});
-
-export const useAppContext = () => {
-  const context = useContext(AppContext);
-  if (!context) {
-    throw new Error("useAppContext must be used within an AppProvider");
-  }
-  return context;
-};
+const AppContext = createContext({});
 
 export default function AppProvider({
   children,
+  initialSessionToken = "",
 }: {
   children: React.ReactNode;
+  initialSessionToken?: string;
 }) {
-  const [sessionToken, setSessionToken] = useState("");
-  return (
-    <AppContext.Provider value={{ sessionToken, setSessionToken }}>
-      {children}
-    </AppContext.Provider>
-  );
+  useLayoutEffect(() => {
+    if (typeof window !== undefined) {
+      ClientSessionToken.value = initialSessionToken;
+    }
+  }, [initialSessionToken]);
+
+  return <>{children}</>;
 }

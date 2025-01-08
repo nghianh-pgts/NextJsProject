@@ -1,7 +1,7 @@
 "use client";
 //dùng client component vì ở đây dùng hook useForm của react-hook-form
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { z } from "zod"; //thư viện giúp validate
 import { zodResolver } from "@hookform/resolvers/zod"; //Kết hợp zod với react-hook-form để tích hợp validate schema trong biểu mẫu.
 import { useForm } from "react-hook-form"; //lấy ra từ react-hook-form
@@ -18,8 +18,16 @@ import {
 import { Input } from "@/components/ui/input";
 import envConfig from "../../../config";
 import { RegisterSchema, RegisterType } from "@/schemaValidations/authSchema";
+import authApiRequest from "@/apiRequests/auth";
+import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
+import { handleErrorApi } from "@/lib/utils";
 
 const RegisterForm = () => {
+  const { toast } = useToast();
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
   console.log(process.env.NEXT_PUBLIC_API_ENDPOINT);
   // 1. Define your form.
   const form = useForm<RegisterType>({
@@ -34,17 +42,44 @@ const RegisterForm = () => {
 
   // 2. Define a submit handler.
   async function onSubmit(values: RegisterType) {
-    const result = await fetch(
-      `${envConfig.NEXT_PUBLIC_API_ENDPOINT}/auth/register`,
-      {
-        body: JSON.stringify(values),
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-      }
-    ).then((res) => res.json());
+    if (loading) return;
+    setLoading(true);
+    try {
+      const result = await authApiRequest.register(values);
+      toast({
+        title: "success",
+        description: "Đăng ký thành công",
+      });
 
+      console.log(result);
+
+      router.push("/login");
+    } catch (error: any) {
+      // const errors = error.payload.errors as {
+      //   message: string;
+      //   field: string;
+      // }[];
+
+      // const status = error.status as number;
+      // if (status === 422) {
+      //   errors.forEach((error) => {
+      //     form.setError(error.field as "email" | "password", {
+      //       type: "server",
+      //       message: error.message,
+      //     });
+      //   });
+      // } else {
+      //   toast({
+      //     title: "Error: lỗi đăng ký",
+      //     description: "Đã có lỗi xảy ra",
+      //   });
+      // }
+      handleErrorApi({ error, setError: form.setError, duration: 5000 });
+    } finally {
+      setLoading(false);
+    }
+
+    const result = await authApiRequest.register(values);
     console.log(result);
   }
 
