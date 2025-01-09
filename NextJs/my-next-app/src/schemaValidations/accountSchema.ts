@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const AccountRes = z
+const AccountRes = z
   .object({
     data: z.object({
       id: z.number(),
@@ -11,4 +11,12 @@ export const AccountRes = z
   })
   .strict();
 
-export type AccountResType = z.TypeOf<typeof AccountRes>;
+type AccountResType = z.TypeOf<typeof AccountRes>;
+
+const UpdateMeBody = z.object({
+  name: z.string().trim().min(2).max(256),
+});
+
+type UpdateMeBodyType = z.TypeOf<typeof UpdateMeBody>;
+
+export { AccountRes, type AccountResType, UpdateMeBody, type UpdateMeBodyType };

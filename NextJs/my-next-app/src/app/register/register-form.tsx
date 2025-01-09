@@ -9,14 +9,12 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import envConfig from "../../../config";
 import { RegisterSchema, RegisterType } from "@/schemaValidations/authSchema";
 import authApiRequest from "@/apiRequests/auth";
 import { useToast } from "@/hooks/use-toast";
@@ -55,25 +53,6 @@ const RegisterForm = () => {
 
       router.push("/login");
     } catch (error: any) {
-      // const errors = error.payload.errors as {
-      //   message: string;
-      //   field: string;
-      // }[];
-
-      // const status = error.status as number;
-      // if (status === 422) {
-      //   errors.forEach((error) => {
-      //     form.setError(error.field as "email" | "password", {
-      //       type: "server",
-      //       message: error.message,
-      //     });
-      //   });
-      // } else {
-      //   toast({
-      //     title: "Error: lỗi đăng ký",
-      //     description: "Đã có lỗi xảy ra",
-      //   });
-      // }
       handleErrorApi({ error, setError: form.setError, duration: 5000 });
     } finally {
       setLoading(false);

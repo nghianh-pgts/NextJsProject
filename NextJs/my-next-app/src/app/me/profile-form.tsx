@@ -22,6 +22,12 @@ import { LoginBodyType, loginSchema } from "@/schemaValidations/authSchema";
 import authApiRequest from "@/apiRequests/auth";
 import { useRouter } from "next/navigation";
 import { handleErrorApi } from "@/lib/utils";
+import {
+  AccountResType,
+  UpdateMeBody,
+  UpdateMeBodyType,
+} from "@/schemaValidations/accountSchema";
+import accountApiRequest from "@/apiRequests/account";
 
 export function debounce<T extends (...args: any[]) => any>(
   func: T,
@@ -37,47 +43,40 @@ export function debounce<T extends (...args: any[]) => any>(
   };
 }
 
-const LoginForm = () => {
-  //console.log(process.env.NEXT_PUBLIC_API_ENDPOINT);
+type profileType = AccountResType["data"];
+
+const ProfileForm = ({ profile }: { profile: profileType }) => {
   // 1. Define your form.
 
-  console.log("re-render");
-  const form = useForm<LoginBodyType>({
-    resolver: zodResolver(loginSchema),
+  console.log(profile);
+
+  const form = useForm<UpdateMeBodyType>({
+    resolver: zodResolver(UpdateMeBody),
     defaultValues: {
-      email: "",
-      password: "",
+      name: profile.name,
     },
   });
 
   const { toast } = useToast();
   const router = useRouter();
 
-  //dùng use callback để ghi nhớ hàm debounce khi gọi, tránh tạo mới 1 hàm debounce mỗi lần click
   const onSubmit = useCallback(
-    debounce(async (values: LoginBodyType) => {
+    debounce(async (values: UpdateMeBodyType) => {
       try {
-        const result = await authApiRequest.login(values);
+        const result = await accountApiRequest.updateMe(values);
         toast({
           title: "success",
-          description: "Đăng nhập thành công",
+          description: "Cập nhật thông tin thành công",
         });
+        router.refresh();
 
         console.log(result);
-
-        const token = await authApiRequest.auth2({
-          sessionToken: result.payload.data.token,
-        });
-        console.log("token", token);
-        // setSessionToken(result.payload.data.token);
-        ClientSessionToken.value = result.payload.data.token;
-        router.push("/me");
       } catch (error: any) {
         handleErrorApi({ error, setError: form.setError, duration: 5000 });
       }
       console.log("Gọi lại hàm onsubmit");
     }, 300), //delay sau 300ms
-    []
+    [form, router, toast]
   );
 
   return (
@@ -87,41 +86,28 @@ const LoginForm = () => {
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-2 max-w-md mx-auto"
         >
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input type="email" placeholder="email" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <FormLabel>Email</FormLabel>
+          <FormControl>
+            <Input type="text" value={profile.email} readOnly />
+          </FormControl>
+          <FormMessage />
 
           <FormField
             control={form.control}
-            name="password"
+            name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Mật khẩu</FormLabel>
+                <FormLabel>Tên mới</FormLabel>
                 <FormControl>
-                  <Input
-                    type="password"
-                    placeholder="nhập mật khẩu"
-                    {...field}
-                  />
+                  <Input type="text" placeholder="nhập tên mới" {...field} />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             )}
           />
 
           <Button type="submit" className="mx-auto block w-full mt-12">
-            Đăng nhập
+            Cập nhật
           </Button>
         </form>
       </Form>
@@ -129,4 +115,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default ProfileForm;

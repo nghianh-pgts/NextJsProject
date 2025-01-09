@@ -3,6 +3,8 @@ import envConfig from "../../config";
 import { ok } from "assert";
 import { LoginResType } from "@/schemaValidations/authSchema";
 import { normalizePath } from "@/lib/utils";
+import { promises } from "dns";
+import { redirect } from "next/navigation";
 
 type CustomOptions = RequestInit & {
   baseUrl?: string | undefined;
@@ -73,6 +75,7 @@ const request = async <Response>(
   options?: CustomOptions | undefined
 ) => {
   let clientLogoutRequest = null;
+
   const body = options?.body ? JSON.stringify(options.body) : undefined;
   const baseHeaders = {
     "Content-Type": "application/json",
@@ -120,20 +123,27 @@ const request = async <Response>(
         }
       );
     } else if (res.status === AUTHENTICATION_ERROR_STATUS) {
+      //nếu là client component thì xử lí logic này
       if (typeof window !== "undefined") {
         if (!clientLogoutRequest) {
+          clientLogoutRequest = await fetch("/api/auth/logout", {
+            method: "POST",
+            body: JSON.stringify({ force: true }),
+            headers: {
+              ...baseHeaders,
+            },
+          });
+          await clientLogoutRequest;
+          ClientSessionToken.value = ""; //set sessionToken = rỗng
+          location.href = "/login"; //điều hướng về login
         }
-
-        clientLogoutRequest = await fetch("/api/auth/logout", {
-          method: "POST",
-          body: JSON.stringify({ force: true }),
-          headers: {
-            ...baseHeaders,
-          },
-        });
-
-        ClientSessionToken.value = "";
-        location.href = "/login";
+      } else {
+        //còn là server thì
+        //lấy token từ headers
+        const sessionTokenFromHeaders = (
+          options?.headers as any
+        )?.Authorization.split(" ")[1];
+        redirect(`/logout?sessionToken=${sessionTokenFromHeaders}`);
       }
     } else {
       throw new HttpError(data);

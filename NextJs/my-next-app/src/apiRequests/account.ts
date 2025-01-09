@@ -1,5 +1,8 @@
 import http from "@/lib/http";
-import { AccountResType } from "@/schemaValidations/accountSchema";
+import {
+  AccountResType,
+  UpdateMeBodyType,
+} from "@/schemaValidations/accountSchema";
 
 const accountApiRequest = {
   me: (sesionToken: string) =>
@@ -10,6 +13,9 @@ const accountApiRequest = {
     }),
   meClient: () => {
     http.get<AccountResType>("account/me");
+  },
+  updateMe: (body: UpdateMeBodyType) => {
+    http.put<AccountResType>("account/me", body);
   },
 };
 

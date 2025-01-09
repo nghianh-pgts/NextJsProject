@@ -1,0 +1,16 @@
+#Khái niệm
+- Debounce là một kỹ thuật được sử dụng trong JavaScript để kiểm soát tần suất một hàm được gọi.
+
+#Cách hoạt động
+- Debounce đảm bảo rằng một hàm chỉ được gọi một lần sau khi một khoảng thời gian nhất định đã trôi qua kể từ lần cuối cùng sự kiện được kích hoạt. Ngăn thực hiện hàm khi người dùng thực hiện một thao tác liên tục
+
+#Sử dụng Debounce
+            function debounce(func, delay) {
+            let timeoutId;
+            return function (...args) {
+                clearTimeout(timeoutId); // Xóa bộ hẹn giờ trước đó
+                timeoutId = setTimeout(() => {
+                func(...args); // Gọi hàm sau khi hết thời gian trì hoãn
+                }, delay);
+            };
+        }
