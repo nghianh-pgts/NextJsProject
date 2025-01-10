@@ -18,6 +18,9 @@ const Header = () => {
         <li>
           <ButtonLogout />
         </li>
+        <li>
+          <Link href="/products">Danh sách sản phẩm</Link>
+        </li>
       </ul>
       <ModeToggle />
     </div>

@@ -76,7 +76,11 @@ const request = async <Response>(
 ) => {
   let clientLogoutRequest = null;
 
-  const body = options?.body ? JSON.stringify(options.body) : undefined;
+  const body = options?.body
+    ? options.body instanceof FormData
+      ? options.body
+      : JSON.stringify(options.body)
+    : undefined;
   const baseHeaders = {
     "Content-Type": "application/json",
     Authorization: ClientSessionToken.value
@@ -189,10 +193,9 @@ const http = {
   },
   delete<Response>(
     url: string,
-    body: any,
     options?: Omit<CustomOptions, "body"> | undefined
   ) {
-    return request<Response>("DELETE", url, { ...options, body });
+    return request<Response>("DELETE", url, { ...options });
   },
 };
 
