@@ -81,12 +81,19 @@ const request = async <Response>(
       ? options.body
       : JSON.stringify(options.body)
     : undefined;
-  const baseHeaders = {
-    "Content-Type": "application/json",
-    Authorization: ClientSessionToken.value
-      ? `Bearer ${ClientSessionToken.value}`
-      : "",
-  };
+  const baseHeaders =
+    body instanceof FormData
+      ? {
+          Authorization: ClientSessionToken.value
+            ? `Bearer ${ClientSessionToken}`
+            : "",
+        }
+      : {
+          "Content-Type": "application/json",
+          Authorization: ClientSessionToken.value
+            ? `Bearer ${ClientSessionToken.value}`
+            : "",
+        };
 
   // Nếu không truyền baseURL hoặc baseUrl = undefined thì lấy từ envConfig (localhost:4000)
   // Nếu truyền baseUrl thì lấy giá trị truyền vào, truyền vào '' thì đồng nghĩa với việc gọi API đến Next.js Server
@@ -135,9 +142,10 @@ const request = async <Response>(
             body: JSON.stringify({ force: true }),
             headers: {
               ...baseHeaders,
-            },
+            } as any,
           });
           await clientLogoutRequest;
+          ``;
           ClientSessionToken.value = ""; //set sessionToken = rỗng
           location.href = "/login"; //điều hướng về login
         }

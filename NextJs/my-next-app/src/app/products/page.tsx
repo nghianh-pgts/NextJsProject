@@ -13,6 +13,12 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import DeleteProduct from "@/app/products/_components/delete-product";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Danh sách sản phẩm",
+  description: "được tạo bởi Hữu Nghĩa",
+};
 
 const ProductList = async () => {
   const { payload } = await productAPIRequest.getList();
@@ -42,7 +48,9 @@ const ProductList = async () => {
           {productList.map((product) => (
             <TableRow key={product.id}>
               <TableCell className="font-medium">{product.id}</TableCell>
-              <TableCell>{product.name}</TableCell>
+              <TableCell>
+                <Link href={`/products/${product.id}`}>{product.name}</Link>
+              </TableCell>
               <TableCell>${product.price}</TableCell>
               <TableCell>{product.description}</TableCell>
               <TableCell>

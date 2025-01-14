@@ -74,6 +74,8 @@ const LoginForm = () => {
         router.push("/me");
       } catch (error: any) {
         handleErrorApi({ error, setError: form.setError, duration: 5000 });
+      } finally {
+        router.refresh();
       }
       console.log("Gọi lại hàm onsubmit");
     }, 300), //delay sau 300ms

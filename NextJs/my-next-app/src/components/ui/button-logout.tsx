@@ -14,6 +14,8 @@ const ButtonLogout = () => {
       router.push("/login");
     } catch (error) {
       handleErrorApi({ error });
+    } finally {
+      router.refresh();
     }
   };
 

@@ -1,5 +1,11 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Trang chủ | Productics",
+  description: "được tạo bởi Hữu Nghĩa",
+};
 
 export default function Home() {
   return (
