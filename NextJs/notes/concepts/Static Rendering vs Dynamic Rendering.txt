@@ -1,0 +1,45 @@
+#Static Rendering (SSR - Static Site Generation)
+- khái niệm: 
+    + Nội dung được render một lần tại thời điểm build (khi deploy ứng dụng).
+    + Kết quả là các file HTML tĩnh được tạo sẵn và lưu trữ trên server hoặc CDN.
+    + Không yêu cầu xử lý phía server trong mỗi lần yêu cầu của người dùng.
+- Đặc điểm:
+    + Tốc độ load trang nhanh, vì chỉ cần gửi file HTML tĩnh đến client.
+    + Tốt cho các trang có nội dung ít thay đổi hoặc không thay đổi thường xuyên.
+    + Không có khả năng hiển thị dữ liệu theo thời gian thực nếu không sử dụng cơ chế cập nhật (revalidation).
+- Ưu điểm:
+    + Hiệu năng cao: Các file HTML tĩnh có thể được cache và phân phối nhanh chóng qua CDN.
+    + Tối ưu SEO: Nội dung đầy đủ sẵn sàng cho các công cụ tìm kiếm.
+    + Chi phí thấp: Giảm tải xử lý phía server vì không cần xử lý động
+- Nhược điểm: Không linh hoạt cho nội dung thay đổi thường xuyên hoặc phụ thuộc vào người dùng.
+
+- Sử dụng khi nào?
+- Nội dung ít thay đổi, ví dụ:
+    + Trang giới thiệu công ty.
+    + Blog hoặc bài viết tĩnh.
+    + Trang tài liệu sản phẩm.
+
+#Dynamic Rendering (SSR - Server-Side Rendering)
+
+- khái niệm: 
+    + Nội dung được render theo yêu cầu của người dùng tại thời điểm tải trang.
+    + Server sẽ xử lý logic, lấy dữ liệu, và trả về HTML được render.
+- Đặc điểm:
+    + Phù hợp cho các trang có nội dung thay đổi thường xuyên hoặc phụ thuộc vào người dùng.
+    + Cần xử lý phía server mỗi khi có yêu cầu từ client, dẫn đến thời gian tải trang chậm hơn so với Static Rendering.
+- Ưu điểm:
+    + Tính linh hoạt cao: Hiển thị nội dung theo thời gian thực hoặc theo yêu cầu của người dùng.
+    + Tương tác cá nhân hóa: Phù hợp cho các trang yêu cầu dữ liệu theo người dùng (như dashboard, profile).
+- Nhược điểm:
+    + Chi phí cao hơn: Server phải xử lý mỗi yêu cầu.
+    + Hiệu năng thấp hơn: Thời gian tải trang phụ thuộc vào tốc độ xử lý server.
+
+ví dụ: Dashboard, trang quản trị, trang có dữ liệu cá nhân hóa, hoặc kết quả tìm kiếm động.
+
+- Sử dụng khi nào?
+- Khi nội dung thay đổi liên tục hoặc phụ thuộc vào người dùng, ví dụ:
+    + Trang kết quả tìm kiếm.
+    + Bảng điều khiển (dashboard) hiển thị dữ liệu theo thời gian thực.
+    + Ứng dụng có nội dung dựa vào dữ liệu đăng nhập (authenticated data).
+
+#Chuyển từ Dynamic function trong Component tree (children, parent Component, hoặc layout...): cookies, headers, search params(?a=1&b=2) thì page sẽ chuyển thành Dynamic rendering

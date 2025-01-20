@@ -1,0 +1,38 @@
+#Link
+- Link là một component được cung cấp bởi Next.js để thực hiện điều hướng giữa các trang mà không cần tải lại trình duyệt, giúp cải thiện hiệu suất.
+- prefetching mặc định
+- Cách sử dụng:
+    import Link from 'next/link';
+
+    export default function HomePage() {
+    return (
+        <div>
+        <h1>Trang chủ</h1>
+        <Link href="/about">Đến trang Giới thiệu</Link>
+        </div>
+    );
+    }
+
+#useRouter (Client Component)
+- useRouter là một hook của Next.js cung cấp quyền truy cập vào đối tượng router, giúp bạn thực hiện các thao tác điều hướng và lấy thông tin về trạng thái router.
+
+- Các phương thức chính của useRouter:
+    + router.push(url, as, options): Điều hướng đến một trang mới
+        router.push('/about');
+    + router.replace(url, as, options): Thay thế URL hiện tại (không thêm vào lịch sử trình duyệt).
+        router.replace('/about');
+    + router.back(): Quay lại trang trước đó.
+        router.back();
+    + router.prefetch(url): Tải trước trang được chỉ định.
+        + router.prefetch('/about');
+
+- Thuộc tính hữu ích:
+    + router.query: Lấy các tham số trong URL.
+        const { query } = router;
+        console.log(query.slug); // Lấy giá trị của ":slug"
+    + router.pathname: Lấy đường dẫn hiện tại.
+        console.log(router.pathname); // "/about/[slug]"
+
+#Redirect (Server Component)
+- Redirect là cách để chuyển hướng người dùng đến một trang khác.
+

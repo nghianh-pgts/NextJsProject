@@ -1,0 +1,46 @@
+#Khái niệm
+- Hydration là quá trình mà JavaScript trên client "gắn kết" với nội dung HTML đã được render trên server, biến nó thành một ứng dụng React tương tác
+- Quá trình này rất quan trọng trong các ứng dụng Server-Side Rendering (SSR) hoặc Static Site Generation (SSG) khi React muốn làm cho giao diện đã được render trở nên "sống" và có khả năng tương tác.
+
+#Cách hoạt động của Hydration
+1. Render trên server
+- Next.js render giao diện trên server, tạo ra HTML tĩnh được gửi đến client.
+- HTML này được hiển thị ngay lập tức trên trình duyệt, giúp cải thiện thời gian tải ban đầu và SEO.
+
+2. Hydration trên Client:
+- Khi JavaScript tải về và chạy trên client, React sẽ khớp (match) HTML hiện có với cây DOM ảo (virtual DOM).
+- Quá trình này giúp kích hoạt các thành phần React, làm chúng trở nên tương tác, như xử lý sự kiện hoặc cập nhật trạng thái.
+
+#ví dụ minh họa:
+    // pages/index.js
+    export default function Home() {
+    return (
+        <div>
+        <h1>Next.js Hydration Example</h1>
+        <button onClick={() => alert('Button clicked!')}>Click me</button>
+        </div>
+    );
+    }
+
+- quá trình diễn ra:
+1. Server-Side Rendering: Server render ra HTML:
+        <div>
+        <h1>Next.js Hydration Example</h1>
+        <button>Click me</button>
+        </div>
+
+2. Hydration trên Client:
+- JavaScript tải về và React kiểm tra xem HTML đã render có khớp với cấu trúc React component không.
+- React "gắn" logic vào nút <button>, kích hoạt khả năng xử lý sự kiện (onClick).
+
+3. Kết quả
+- Nút bấm trở nên tương tác. Khi người dùng nhấp, React xử lý sự kiện onClick.
+
+#Vấn đề thường gặp
+1. Mismatch Error:
+- Nếu HTML server-rendered khác với DOM ảo trên client, React sẽ báo lỗi:
+        Warning: Text content does not match server-rendered HTML.
+
+- nguyên nhân:
+    + Dữ liệu động được thay đổi sau khi render trên server, ví dụ: ngày giờ.
+    + Sử dụng các API phụ thuộc vào client (như window, localStorage) trong quá trình render.

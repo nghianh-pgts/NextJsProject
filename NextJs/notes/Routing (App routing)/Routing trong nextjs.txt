@@ -1,0 +1,48 @@
+- Routing trong Next.js được quản lý dựa trên cấu trúc thư mục của thư mục app/. Dưới đây là các khái niệm cơ bản và cách sử dụng routing trong Next.js:
+
+#routing cơ bản:
+
+- ví dụ: mỗi thư mục trong thư mục /src/app/ tự động trở thành một route (gọi là một segment).
+- Cấu trúc thư mục:
+        app/
+        ├── page.js                // Trang mặc định, tương ứng với "/"
+        ├── about/
+        │   ├── page.js            // Tương ứng với "/about"
+        │   └── team/
+        │       ├── page.js        // Tương ứng với "/about/team"
+        ├── blog/
+        │   ├── [slug]/
+        │   │   ├── page.js        // Tương ứng với "/blog/:slug"
+        │   ├── page.js            // Tương ứng với "/blog"
+        ├── layout.js              // Layout chung cho toàn bộ ứng dụng
+        ├── loading.js             // Trang hiển thị khi đang tải dữ liệu
+        └── error.js               // Trang hiển thị khi gặp lỗi
+
+
+#Nested Routing
+- Thư mục con trong app/ được ánh xạ thành route.
+- Cấu trúc thư mục:
+        app/
+        ├── blog/
+        │   ├── page.jsx  // Tương ứng với "/blog/"
+        │   ├── post.jsx  // Component không thể truy cập qua public URL
+
+    + app/blog/page.jsx: Tương ứng với /blog.
+    + app/blog/post.jsx: Component được định nghĩa thêm
+
+
+#Nếu muốn tạo folder không ảnh hưởng đến Routing thì bao tên folder trong dấu '()'
+
+#Dynamic Routing
+- Dùng dấu ngoặc vuông [param] để định nghĩa các route động.
+
+ví dụ:
+        app/
+        ├── blog/
+        │   ├── [slug]/ // có thể là id, ví dụ blog/2
+        │   │   ├── page.js        // Tương ứng với "/blog/:slug"
+
+        export default function BlogPost({ params }) {
+        const { slug } = params;
+        return <h1>Bài viết: {slug}</h1>;
+        }

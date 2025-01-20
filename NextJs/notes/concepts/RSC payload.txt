@@ -1,0 +1,50 @@
+#RSC Payload là gì?
+- RSC Payload (React Server Component Payload) là dữ liệu được gửi từ server đến client trong kiến trúc React Server Components (RSC) của React. Payload này chứa thông tin về trạng thái, cấu trúc, và nội dung của các component được render trên server.
+- RSC Payload được thiết kế để giảm kích thước của dữ liệu truyền từ server đến client bằng cách chỉ gửi những phần cần thiết của giao diện, thay vì gửi toàn bộ JavaScript để thực hiện việc render trên client.
+
+#Chi tiết về RSC Payload
+1. Nội dung RSC Payload
+- Chứa dữ liệu đã render trên server, được tối ưu hóa để client có thể hiển thị ngay lập tức.
+- Dạng JSON hoặc Stream, giúp tối ưu hóa thời gian tải
+- Bao gồm thông tin: 
+    + kết quả render của các Render Components
+    + Metadata để client hiểu cách hiển thị nội dung
+
+2. Quá trình hoạt động:
+
+- Khi client yêu cầu một trang hoặc một phần của giao diện => server sẽ render các Server component => trả về RSC Payload => Client nhận Payload, kết hợp với các Client Components để tạo giao diện hoàn chỉnh (hydration). 
+ 
+ 3. Điểm đặc biệt:
+ - RSC chỉ chứa nội dung cần thiết, không bao gồm logic JavaScript của Server Component
+ - Điều này giúp giảm tải kích thước bundle trên client, cải thiện hiệu năng ứng dụng
+
+ #ví dụ RSC Payload:
+- Giả sử bạn có một React Server Component như sau:
+    // components/ProductList.js
+    export default async function ProductList() {
+    const products = await fetch('https://api.example.com/products').then(res => res.json());
+    return (
+        <ul>
+        {products.map(product => (
+            <li key={product.id}>{product.name}</li>
+        ))}
+        </ul>
+    );
+    }
+
+1. Server xử lý render:
++ ProductList được render trên server.
++ Server tạo RSC Payload chứa dữ liệu JSON với danh sách sản phẩm.
+
+2. Server tạo RSC Payload chứa dữ liệu JSON với danh sách sản phẩm.
+    {
+    "type": "ul",
+    "children": [
+        { "type": "li", "key": "1", "children": ["Product A"] },
+        { "type": "li", "key": "2", "children": ["Product B"] },
+        { "type": "li", "key": "3", "children": ["Product C"] }
+    ]
+    }
+
+3. Client hiển thị:
+- Client nhận payload, render danh sách sản phẩm trực tiếp mà không cần chạy thêm logic trên client.

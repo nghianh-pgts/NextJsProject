@@ -1,0 +1,24 @@
+#Metadata
+- Trong Next.js, Metadata là một tính năng cho phép bạn định nghĩa các thông tin meta của trang web, như tiêu đề (title), mô tả (description), thẻ Open Graph, thẻ Twitter, và các thẻ meta khác.
+- Metadata được sử dụng để cải thiện SEO (Search Engine Optimization), chia sẻ trên mạng xã hội, và hiển thị thông tin trang trong trình duyệt.
+
+cú pháp cơ bản: 
+
+    import { Metadata } from "next";
+
+    export const metadata: Metadata = {
+    title: "Trang chủ | Productics",
+    description: "được tạo bởi Hữu Nghĩa",
+    };
+
+Metadata với template:
+    //Đặt tại layout root
+    export const metadata: Metadata = {
+    title: {
+        template: "%s | Productics",
+        default: "Productics",
+    },
+    description: "được tạo bởi Hữu Nghĩa",
+    };
+
+khi muốn tạo Title động => dùng generateMetada 

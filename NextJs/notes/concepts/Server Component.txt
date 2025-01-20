@@ -11,3 +11,16 @@
 - Streaming 
 
 => Ưu tiên dùng Server Component khi có thể
+
+#Đặc điểm:
+
++ Được render hoàn toàn trên server.
++ Không có quyền truy cập vào State, Event Handlers hoặc các API của browser như window, localStorage, ...
++ Tối ưu cho việc render HTML tĩnh hoặc khi cần lấy dữ liệu từ server.
++ Kết quả là HTML tĩnh, nhẹ hơn vì không chứa JavaScript cần gửi đến client.
++ Tự động hỗ trợ Streaming (gửi từng phần HTML về client).
+
+
+#Ứng dụng:
+- Dùng để render các phần giao diện tĩnh hoặc giao diện phụ thuộc vào dữ liệu lấy từ database.
+Ví dụ: Trang danh sách sản phẩm, bài viết tĩnh.

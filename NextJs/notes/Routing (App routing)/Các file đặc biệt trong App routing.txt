@@ -1,0 +1,29 @@
+#page.js
+- Được sử dụng để định nghĩa nội dung của một trang.
+- Mỗi thư mục phải chứa một file page.js để đại diện cho một tuyến đường cụ thể.
+
+#layout.js
+- Dùng để tạo layout chung cho các trang con.
+- File layout.js trong một thư mục sẽ bao bọc nội dung các page.js hoặc layout.js con bên dưới.
+- root layout là bắt buộc phải có
+- chỉ root layout có thể chứa <html> and <body> tags.
+- Nếu lồng Root layout với các layout con thì chúng sẽ lồng nhau
+- Khi file layout và page.js nằm trong cùng 1 folder, file layout sẽ bọc file page
+- truyền data từ layout cha xuống layout con là không thể
+    // app/layout.js
+    export default function RootLayout({ children }) {
+    return (
+        <html>
+        <body>
+            <header>Header chung</header>
+            {children}
+        </body>
+        </html>
+    );
+    }
+
+#Error.js
+- Hiển thị khi xảy ra lỗi trong quá trình render.
+
+#Loading.js
+- Hiển thị khi trang đang tải dữ liệu (tự động xuất hiện với các route sử dụng React Suspense).

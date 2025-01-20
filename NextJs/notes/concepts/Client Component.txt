@@ -8,6 +8,9 @@
 - Client Component bị render tối thiếu 2 lần: 1 lần build, 1+ lần ở client
 - Vì trả về HTML sẵn nên người dùng có thể thấy content ngay lập tức(tăng UX)
 - Dù thấy content ngay lập tức nhưng vẫn không thể tương tác ngay được vì cần phải chờ trình duyệt đồng bộ lại client Component (render, gắn sự kiện, state, effect,...)
+- Có quyền truy cập vào State, Event Handlers và các API của browser.
+- Cần tải thêm JavaScript để chạy trên trình duyệt.
+- Sử dụng khi cần tính tương tác động (Interactive UI).
 
 #Ưu điểm:
 - Giảm gánh nặng cho server khi Component nặng và phức tạp về logic => server yếu thì nên dùng
