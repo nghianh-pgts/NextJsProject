@@ -1,0 +1,46 @@
+#Fetching với Server Components
+- Sử dụng Fetch: Biến component của bạn thành một hàm bất đồng bộ và sử dụng await để gọi fetch.
+ví dụ:
+        // app/blog/page.tsx
+        export default async function Page() {
+        const data = await fetch('https://api.example.com/blog');
+        const posts = await data.json();
+        return (
+            <ul>
+            {posts.map((post) => (
+                <li key={post.id}>{post.title}</li>
+            ))}
+            </ul>
+        );
+        }
+
+- Sử dụng ORM hoặc cơ sở dữ liệu: Biến component của bạn thành một hàm bất đồng bộ và sử dụng await để gọi cơ sở dữ liệu.
+
+*Lưu ý rằng các yêu cầu fetch trong Server Components có thể được cấu hình để lưu vào bộ nhớ đệm (cache) hoặc không, tùy thuộc vào nhu cầu của bạn. 
+
+
+#Fetching trong Client Components
+- Sử dụng hook use của React: Bạn có thể truyền một promise từ Server Component vào Client Component và sử dụng hook use để xử lý promise đó.
+
+- Sử dụng thư viện của bên thứ ba: Các thư viện như SWR hoặc React Query cung cấp các API riêng để quản lý việc lấy dữ liệu, lưu vào bộ nhớ đệm, và tái xác thực.
+ví dụ:
+        // app/blog/page.tsx
+        'use client';
+        import useSWR from 'swr';
+
+        const fetcher = (url) => fetch(url).then((res) => res.json());
+
+        export default function BlogPage() {
+        const { data, error, isLoading } = useSWR('https://api.example.com/blog', fetcher);
+
+        if (isLoading) return <div>Loading...</div>;
+        if (error) return <div>Error: {error.message}</div>;
+
+        return (
+            <ul>
+            {data.map((post) => (
+                <li key={post.id}>{post.title}</li>
+            ))}
+            </ul>
+        );
+        }

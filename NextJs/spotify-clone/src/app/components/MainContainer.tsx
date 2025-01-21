@@ -7,14 +7,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useMemo } from "react";
 import { BsMusicNoteList } from "react-icons/bs";
-import {
-  FaHeart,
-  FaHome,
-  FaMusic,
-  FaSearch,
-  FaSpotify,
-  FaUsers,
-} from "react-icons/fa";
+import { FaHeart, FaHome, FaSearch, FaSpotify, FaUsers } from "react-icons/fa";
 import { FaUser } from "react-icons/fa6";
 import { GiImperialCrown } from "react-icons/gi";
 import { twMerge } from "tailwind-merge";
@@ -52,6 +45,7 @@ const MainContainer: React.FC<MainConTainerProps> = ({ children }) => {
 
   return (
     <div className={twMerge(`flex h-full`, "")}>
+      {/* left bar */}
       <div className="flex h-full flex-col backdrop-blur-sm bg-black/50">
         <div className="w-full flex items-center gap-3 px-4 py-6">
           <FaSpotify className="text-4xl text-emerald-500" />
@@ -79,7 +73,10 @@ const MainContainer: React.FC<MainConTainerProps> = ({ children }) => {
           </Box>
         </div>
       </div>
-      <main className="flex-1 overflow-y-auto py-6">{children}</main>
+
+      {/* end left bar */}
+
+      <main className="flex-1 overflow-y-auto">{children}</main>
       <RightBar>
         <div className="w-12 h-12 rounded-full bg-neutral-600 cursor-pointer flex items-center relative"></div>
         <Button>

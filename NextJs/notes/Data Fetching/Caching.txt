@@ -1,0 +1,42 @@
+- Next.js cung cấp các tùy chọn caching linh hoạt để cải thiện hiệu năng và tối ưu hóa quá trình lấy dữ liệu, đặc biệt khi sử dụng fetch API.
+
+#caching mặc định (cache: 'force-cache')
+- Đây là thiết lập mặc định khi bạn gọi fetch. Dữ liệu sẽ được lưu vào bộ nhớ đệm (cache) và được tái sử dụng cho các yêu cầu tiếp theo mà không cần truy vấn lại server.
+- Phù hợp với nội dung không thay đổi thường xuyên.
+
+Ví dụ:
+        // app/page.tsx
+        export default async function Page() {
+        const res = await fetch('https://api.example.com/data'); // Mặc định sử dụng 'force-cache'
+        const data = await res.json();
+
+        return <pre>{JSON.stringify(data, null, 2)}</pre>;
+        }
+
+#Không lưu vào bộ nhớ đệm (cache: 'no-store')
+- Tất cả các yêu cầu sẽ luôn được gửi đến server để lấy dữ liệu mới nhất.
+- Phù hợp cho các ứng dụng cần dữ liệu real-time hoặc dữ liệu thay đổi liên tục.
+
+Ví dụ:
+        export default async function Page() {
+        const res = await fetch('https://api.example.com/data', { cache: 'no-store' });
+        const data = await res.json();
+
+        return <pre>{JSON.stringify(data, null, 2)}</pre>;
+        }
+
+#. Revalidation (ISR - Incremental Static Regeneration)
+- Kết hợp caching và tái xác thực (revalidation) để dữ liệu được cập nhật định kỳ.
+- Dùng thuộc tính next.revalidate để cấu hình thời gian (tính bằng giây) giữa các lần tái xác thực dữ liệu.
+
+Ví dụ:
+        export default async function Page() {
+        const res = await fetch('https://api.example.com/data', { next: { revalidate: 60 } });
+        const data = await res.json();
+
+        return <pre>{JSON.stringify(data, null, 2)}</pre>;
+        }
+
+- Trong ví dụ này, dữ liệu sẽ được làm mới mỗi 60 giây.
+
+*Mặc định, Nextjs sẽ catch fetch request gọi trước dynamic functions (headers(), cookies(), searchParams()), và sẽ không cache các request được gọi sau các phương thức này.
