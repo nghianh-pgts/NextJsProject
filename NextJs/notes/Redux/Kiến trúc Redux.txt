@@ -1,0 +1,36 @@
+#Redux hoạt động dựa trên 3 thành phần chính:
+- Store: 
+    + Store là trung tâm của Redux, nơi lưu trữ toàn bộ trạng thái của ứng dụng.
+    + Mỗi ứng dụng Redux chỉ có một Store duy nhất.
+    + State trong store là bất biến (immutable) và chỉ được cập nhật thông qua actions và reducers.
+- Action:
+    + Action là một object mô tả những gì bạn muốn xảy ra trong ứng dụng.
+    + Action cần có một thuộc tính bắt buộc là type, đại diện cho loại hành động. type thường được viết dưới dạng hằng số để tránh lỗi.
+    + Action có thể có thêm các dữ liệu bổ sung (payload) để cung cấp thông tin cho reducer.
+
+ví dụ:
+        // Định nghĩa action
+        const incrementAction = {
+        type: 'INCREMENT',
+        };
+
+        const decrementAction = {
+        type: 'DECREMENT',
+        };
+
+        // Action với payload
+        const setUserAction = (user) => ({
+        type: 'SET_USER',
+        payload: user, // Dữ liệu bổ sung
+        });
+
+        // Dispatch action
+        store.dispatch(incrementAction); // Tăng state
+        store.dispatch(decrementAction); // Giảm state
+        store.dispatch(setUserAction({ name: 'Nghĩa', age: 25 }));
+
+- Reducer: 
+    + Một hàm thuần nhận state và action để trả về state mới.
+    + Không thay đổi trực tiếp state (phải tạo ra bản sao mới).
+    + Không thực hiện các tác vụ bất đồng bộ hoặc tạo side effects.
+

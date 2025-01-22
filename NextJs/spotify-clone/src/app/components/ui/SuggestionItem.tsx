@@ -18,7 +18,7 @@ const SuggestionItem: React.FC<SuggestionProps> = ({ href, title }) => {
       />
 
       <p className="text-neutral-400 text-wrap text-xs truncate">{title}</p>
-      <div className="absolute bottom-11 right-3 w-10 h-10 bg-emerald-600 rounded-full flex items-center justify-center text-sm"></div>
+      {/* <div className="absolute bottom-11 right-3 w-10 h-10 bg-emerald-600 rounded-full flex items-center justify-center text-sm"></div> */}
     </div>
   );
 };

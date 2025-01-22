@@ -1,0 +1,35 @@
+Ví dụ: Redux cơ bản
+
+import { createStore } from 'redux';
+
+// 1. Action
+const increment = () => ({
+  type: 'INCREMENT',
+});
+
+const decrement = () => ({
+  type: 'DECREMENT',
+});
+
+// 2. Reducer
+const counterReducer = (state = 0, action) => {
+  switch (action.type) {
+    case 'INCREMENT':
+      return state + 1;
+    case 'DECREMENT':
+      return state - 1;
+    default:
+      return state;
+  }
+};
+
+// 3. Store
+const store = createStore(counterReducer);
+
+// 4. Lắng nghe thay đổi
+store.subscribe(() => console.log(store.getState()));
+
+// 5. Dispatch Actions
+store.dispatch(increment()); // Output: 1
+store.dispatch(increment()); // Output: 2
+store.dispatch(decrement()); // Output: 1

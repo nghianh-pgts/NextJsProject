@@ -1,0 +1,4 @@
+#Redux là một state management library giúp quản lý trạng thái của ứng dụng trong một store duy nhất. Redux hoạt động dựa trên 3 nguyên tắc chính:
+    - Single Source of Truth (Nguồn dữ liệu duy nhất): Toàn bộ trạng thái của ứng dụng được lưu trữ trong một object.
+    - State is Read-Only (Trạng thái chỉ đọc): Bạn không thể thay đổi trực tiếp state, chỉ có thể thay đổi thông qua dispatching actions.
+    - Changes are Made with Pure Functions (Thay đổi thông qua hàm thuần): Sử dụng reducers để cập nhật state dựa trên action.

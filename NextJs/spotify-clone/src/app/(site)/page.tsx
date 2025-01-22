@@ -9,6 +9,7 @@ const Home = () => {
       <CategoryBar />
       <AlbumBar />
       <Suggestion title="Dành Cho Bạn" />
+      <Suggestion title="Tuyển tập nhạc hay nhất của các nghệ sĩ" />
     </div>
   );
 };
